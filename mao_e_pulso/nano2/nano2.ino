@@ -2,7 +2,7 @@
 #include <Wire.h>
 
 #define NUM_MOV 4 //número de movimentos conhecidos
-#define ANGULO_MAX 90 //ângulo máximo de compressão do fio
+#define ANGULO_MAX 60 //ângulo máximo de compressão do fio
 #define ANGULO_MAX_P 180 //ângulo máximo de compressão do fio
 #define ANGULO_MIN 0  //ângulo de à vontade
 #define SERVO_POS_UM 6  //pin do primeiro servo, os outros vêm de seguida, logo, SERVO_POS_UM = [1, 9]
@@ -37,12 +37,12 @@ void tesoura() {
 }
 
 //funções auxiliares
-void angulos_mao(int p, int i, int M) {
-  mao.anelar = p;
-  mao.mindinho = i;
-  mao.pulso = M;
-  info_mao();
-  //servos_mao();
+void angulos_mao(int a, int m, int p) {
+  mao.anelar = a;
+  mao.mindinho = m;
+  mao.pulso = p;
+  //info_mao();
+  servos_mao();
 }
 void init_mao() {
 

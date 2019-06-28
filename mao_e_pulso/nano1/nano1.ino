@@ -2,7 +2,7 @@
 #include <Wire.h>
 
 #define NUM_MOV 4 //número de movimentos conhecidos
-#define ANGULO_MAX 90 //ângulo máximo de compressão do fio
+#define ANGULO_MAX 60 //ângulo máximo de compressão do fio
 #define ANGULO_MIN 0  //ângulo de à vontade
 #define SERVO_POS_UM 6  //pin do primeiro servo, os outros vêm de seguida, logo, SERVO_POS_UM = [1, 9]
 #define DELAY 500 //tempo de espera para rotacao dos servos
@@ -40,8 +40,8 @@ void angulos_mao(int p, int i, int M) {
   mao.polegar = p;
   mao.indicador = i;
   mao.medio = M;
-  info_mao();
-  //servos_mao();
+  //info_mao();
+  servos_mao();
 }
 void init_mao() {
 
