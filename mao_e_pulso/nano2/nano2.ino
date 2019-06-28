@@ -3,6 +3,7 @@
 
 #define NUM_MOV 4 //número de movimentos conhecidos
 #define ANGULO_MAX 90 //ângulo máximo de compressão do fio
+#define ANGULO_MAX_P 180 //ângulo máximo de compressão do fio
 #define ANGULO_MIN 0  //ângulo de à vontade
 #define SERVO_POS_UM 6  //pin do primeiro servo, os outros vêm de seguida, logo, SERVO_POS_UM = [1, 9]
 #define DELAY 500 //tempo de espera para rotacao dos servos
@@ -13,33 +14,33 @@ typedef void (*vect_funcoes_void)();
 
 // estrutura dos servos da mão
 typedef struct {
-  int polegar;
-  int indicador;
-  int medio;
+  int anelar;
+  int mindinho;
+  int pulso;
 } MAO;
 
 // declarações de variáveis globais
 MAO mao;  //estrura que contem os dedos da mao
 vect_funcoes_void vect_movimentos_mao[NUM_MOV] = {&relax_mao, &pedra, &papel, &tesoura};  //vetor com funções que representão os movimentos conhecidos
-Servo s_polegar, s_indicador, s_medio;
+Servo s_medio, s_anelar, s_mindinho, s_pulso;
 int *movimento = 0;
 
 // movimentos conhecidos
 void pedra() {
-  angulos_mao(ANGULO_MAX, ANGULO_MAX, ANGULO_MAX);
+  angulos_mao(ANGULO_MAX, ANGULO_MAX, ANGULO_MAX_P / 2);
 }
 void papel() {
-  angulos_mao(ANGULO_MIN, ANGULO_MIN, ANGULO_MIN);
+  angulos_mao(ANGULO_MIN, ANGULO_MIN, ANGULO_MAX_P / 2);
 }
 void tesoura() {
-  angulos_mao(ANGULO_MAX, ANGULO_MIN, ANGULO_MIN);
+  angulos_mao(ANGULO_MAX, ANGULO_MIN, ANGULO_MAX_P / 2);
 }
 
 //funções auxiliares
 void angulos_mao(int p, int i, int M) {
-  mao.polegar = p;
-  mao.indicador = i;
-  mao.medio = M;
+  mao.anelar = p;
+  mao.mindinho = i;
+  mao.pulso = M;
   info_mao();
   //servos_mao();
 }
@@ -53,20 +54,20 @@ void init_mao() {
 void relax_mao() {
   int times = 1;
   for (int i = 0; i <  times * 5; i++) {
-    angulos_mao(ANGULO_MAX * (((i + 5) % 5) == 0), ANGULO_MAX * (((i + 4) % 5) == 0), ANGULO_MAX * (((i + 3) % 5) == 0));
+    angulos_mao(ANGULO_MAX * (((i + 2) % 5) == 0), ANGULO_MAX * (((i + 1) % 5) == 0), ANGULO_MAX_P / 2);
     delay(DELAY);
-    if (i == times * 3 || i == times * 4) {
+    if (i != times * 3 || i != times * 4) {
       delay(DELAY);
     }
   }
 }
 void info_mao() {
-  Serial.print("Polegar: ");
-  Serial.println(mao.polegar);
-  Serial.print("Indicador: ");
-  Serial.println(mao.indicador);
-  Serial.print("Médio: ");
-  Serial.println(mao.medio);
+  Serial.print("Anelar: ");
+  Serial.println(mao.anelar);
+  Serial.print("Mindinho: ");
+  Serial.println(mao.mindinho);
+  Serial.print("Pulso: ");
+  Serial.println(mao.pulso);
   Serial.println();
 }
 
@@ -77,26 +78,26 @@ void attach_servos() {
     s_indicador.attach(SERVO_POS_UM + 1, ANGULO_MIN, ANGULO_MAX);
     s_medio.attach(SERVO_POS_UM + 2, ANGULO_MIN, ANGULO_MAX);*/
 
-  s_polegar.attach(SERVO_POS_UM);
-  s_indicador.attach(SERVO_POS_UM + 1);
-  s_medio.attach(SERVO_POS_UM + 2);
+  s_anelar.attach(SERVO_POS_UM);
+  s_mindinho.attach(SERVO_POS_UM + 1);
+  s_pulso.attach(SERVO_POS_UM + 2);
 }
 void detach_servos() {
-  s_polegar.detach();
-  s_indicador.detach();
-  s_medio.detach();
+  s_anelar.detach();
+  s_mindinho.detach();
+  s_pulso.detach();
 }
 void servos_mao() {
-  if (s_polegar.read() != mao.polegar) {
-    s_polegar.write(mao.polegar);
+  if (s_anelar.read() != mao.anelar) {
+    s_anelar.write(mao.anelar);
     delay(DELAY);
   }
-  if (s_indicador.read() != mao.indicador) {
-    s_indicador.write(mao.indicador);
+  if (s_mindinho.read() != mao.mindinho) {
+    s_mindinho.write(mao.mindinho);
     delay(DELAY);
   }
-  if (s_medio.read() != mao.medio) {
-    s_medio.write(mao.medio);
+  if (s_pulso.read() != mao.pulso) {
+    s_pulso.write(mao.pulso);
     delay(DELAY);
   }
 }
