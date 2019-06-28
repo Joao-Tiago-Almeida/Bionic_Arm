@@ -40,7 +40,7 @@ void seleciona_movimento(byte num) {
 
 void loop() {
   movimento = 0;
-  
+
   if (get_card()) {
     Serial.print("UID tag :");
     String content = "";
@@ -62,11 +62,11 @@ void loop() {
       delay(500);
     }
 
-    else {
-      Serial.println(" Access denied");
-    }
+
+    Serial.println(" Access denied");
   }
-  while(movimento < NUM_MOV){
+
+  while (movimento < NUM_MOV) {
     seleciona_movimento(movimento);
     Serial.println(movimento);
     movimento ++;
