@@ -36,6 +36,10 @@ void tesoura() {
   angulos_mao(ANGULO_MAX, ANGULO_MIN, ANGULO_MAX_P / 2);
 }
 
+void rock(){
+  angulos_mao(ANGULO_MIN, ANGULO_MAX, ANGULO_MAX_P / 2);
+}
+
 //funções auxiliares
 void angulos_mao(int a, int m, int p) {
   mao.anelar = a;
