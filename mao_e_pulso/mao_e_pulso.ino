@@ -112,7 +112,7 @@ void info_mao() {
 //atua quando a mão está pronta a ser utilizada
 void servo_ready(){
   pinMode(13, OUTPUT);
-  for(int i = 0; i< NUM_MOV; i++){
+  for(int i = 1; i <= NUM_MOV; i++){
     digitalWrite(13, HIGH);
     delay(NUM_MOV/i);
     digitalWrite(13, LOW);
