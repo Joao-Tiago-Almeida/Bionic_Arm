@@ -30,16 +30,12 @@ void setup() {
   Serial.begin(9600);
   SPI.begin();          //Leitura cartão
   mfrc522.PCD_Init();
-<<<<<<< HEAD
   randomSeed(analogRead(0));
   lcd.begin(16, 2);
-=======
->>>>>>> b686bf82888a4c7c5dbcad2199e4fdf38164df48
 }
 
 String carmen_card = "94 92 AE CB", joao_card = "15 55 89 92";
 byte movimento;
-<<<<<<< HEAD
 String player_name = "", option = "";
 int game_over, comp_score, player_score, comp_choice;
 
@@ -62,21 +58,6 @@ void menu() {
   lcd.print(player_name);
 
   Serial.println("\nWhat would you like to do?\n1- Play Rock, Paper, Scissors\n2- Read my school card for a special move");
-=======
-String player_name = "";
-String option = "";
-
-void menu() {
-  Serial.println("----- Welcome to the Bionic Arm! -----\n What's your name?");
-
-  while (!Serial.available() && player_name == "") {
-    player_name = Serial.readString();
-  }
-  Serial.print("Hello, ");
-  Serial.print(player_name);
-
-  Serial.println("What would you like to do?\n1- Play Rock, Paper, Scissors\n2- Read my school card for a special move");
->>>>>>> b686bf82888a4c7c5dbcad2199e4fdf38164df48
 
   while (!Serial.available() && (option.charAt(0) != '1' || option.charAt(0) != '2') && option == "") {
     option = Serial.readString();
@@ -97,7 +78,6 @@ void menu() {
 }
 
 void game() {
-<<<<<<< HEAD
   game_over = 0, comp_score = 0, player_score = 0;
   Serial.println("Let the games begin!");
 
@@ -186,9 +166,6 @@ void game() {
   lcd.setCursor(0, 1);
   lcd.print("playing!");
   delay(5000);
-=======
-  Serial.println("Game");
->>>>>>> b686bf82888a4c7c5dbcad2199e4fdf38164df48
 }
 
 bool get_card() {
@@ -228,11 +205,7 @@ void read_card() {
       lcd.print(person);
       delay(500);
     }
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> b686bf82888a4c7c5dbcad2199e4fdf38164df48
     Serial.println(" Access denied");
   }
 }
