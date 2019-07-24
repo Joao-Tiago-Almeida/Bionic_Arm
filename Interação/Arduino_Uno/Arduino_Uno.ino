@@ -10,19 +10,7 @@
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 bool get_card();
 
-/* LCD RS pin to digital pin 12
-   LCD Enable pin to digital pin 11
-   LCD D4 pin to digital pin 5
-   LCD D5 pin to digital pin 4
-   LCD D6 pin to digital pin 3
-   LCD D7 pin to digital pin 2
-   LCD R/W pin to ground
-   LCD VSS pin to ground
-   LCD VCC pin to 5V
-   10K resistor:
-   ends to +5V and ground
-   wiper to LCD VO pin (pin 3)*/
-const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+const int rs = 7, en = 6, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
 void setup() {
@@ -145,7 +133,7 @@ void game() {
       lcd.print("Sorry, you lost!");
       lcd.setCursor(8, 1);
       lcd.print(":(");
-      
+
       game_over = 1;
       delay(5000);
     }
@@ -155,7 +143,7 @@ void game() {
       lcd.print("Congratulations!");
       lcd.setCursor(2, 1);
       lcd.print("You win!");
-      
+
       game_over = 1;
       delay(5000);
     }
