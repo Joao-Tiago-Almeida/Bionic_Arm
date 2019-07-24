@@ -1,13 +1,18 @@
 # Connections
 RC522 Pin Name -  Arduino UNO Pin Number
 
-RST - 9
-SDA - 10 
-MOSI - 11
-MISO - 12
-SCK - 13
-VCC - 3.3V
-GND - GND
+VSS - 5V
+VCC - 5V
+VEE - 5V
+RS - 7
+RW - GND
+E - 6
+D4 - 5
+D5 - 4
+D6 - 3
+D7 - 2
+LED+ - 5V 
+LED- - GND
 
 # Breadboard
 ![LCD_Arduino_bb](https://user-images.githubusercontent.com/47796759/61814410-f2ba9e80-ae3f-11e9-9928-90c680c3bb2c.png)
