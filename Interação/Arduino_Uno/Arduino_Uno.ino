@@ -3,9 +3,15 @@
 #include <MFRC522.h>
 #include <LiquidCrystal.h>
 
-#define NUM_MOV 5 //numero de movimentos conhecidos
+#define NUM_MOV 5
 #define SS_PIN 10
 #define RST_PIN 9
+#define REST 0
+#define ROCK 1
+#define PAPER 2
+#define SCISSORS 3
+#define JOAO 4
+#define CARMEN 5
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 bool get_card();
@@ -22,7 +28,7 @@ void setup() {
   lcd.begin(16, 2);
 }
 
-String carmen_card = "94 92 AE CB", joao_card = "15 55 89 92";
+String carmen_card = "8D 29 91 B9", joao_card = "15 55 89 92";
 byte movimento;
 String player_name = "", option = "";
 int game_over, comp_score, player_score, comp_choice;
@@ -71,7 +77,7 @@ void game() {
 
   while (!game_over) {
     option = "";
-    comp_choice = random(3);
+    comp_choice = random(1, 4);
 
     for (int i = 3; i != 0;  i--) {
       Serial.println(i);
@@ -83,19 +89,19 @@ void game() {
     }
     seleciona_movimento(comp_choice);
 
-    if (comp_choice == 0) {
+    if (comp_choice == ROCK) {
       lcd.setCursor(0, 0);
       lcd.print("Computer chose");
       lcd.setCursor(0, 1);
       lcd.print("Rock");
     }
-    if (comp_choice == 1) {
+    if (comp_choice == PAPER) {
       lcd.setCursor(0, 0);
       lcd.print("Computer chose");
       lcd.setCursor(0, 1);
       lcd.print("Paper");
     }
-    if (comp_choice == 2) {
+    if (comp_choice == SCISSORS) {
       lcd.setCursor(0, 0);
       lcd.print("Computer chose");
       lcd.setCursor(0, 1);
@@ -135,7 +141,6 @@ void game() {
       lcd.print(":(");
 
       game_over = 1;
-      delay(5000);
     }
     else if (player_score == 3) {
       Serial.println("\n----- Congratulations! You win! -----");
@@ -145,8 +150,9 @@ void game() {
       lcd.print("You win!");
 
       game_over = 1;
-      delay(5000);
     }
+    delay(2500);
+    seleciona_movimento(REST);
   }
   Serial.println("Thank you for playing!\n");
   lcd.setCursor(0, 0);
@@ -169,15 +175,15 @@ bool get_card() {
 
 void read_card() {
   Serial.println("Put your card to the reader, please...");
-  while (!get_card()) {
-    Serial.print("UID tag :");
-    String content = "";
-    for (byte i = 0; i < mfrc522.uid.size; i++) {
-      Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
-      Serial.print(mfrc522.uid.uidByte[i], HEX);
-      content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
-      content.concat(String(mfrc522.uid.uidByte[i], HEX));
-    }
+  while (!get_card());
+  Serial.print("UID tag :");
+  String content = "";
+  for (byte i = 0; i < mfrc522.uid.size; i++) {
+    Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
+    Serial.print(mfrc522.uid.uidByte[i], HEX);
+    content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
+    content.concat(String(mfrc522.uid.uidByte[i], HEX));
+
     Serial.println();
     Serial.print("Message : ");
     content.toUpperCase();
@@ -191,7 +197,16 @@ void read_card() {
       lcd.print("Hello,");
       lcd.setCursor(0, 1);
       lcd.print(person);
+
+      if (person == "Carmen") {
+        seleciona_movimento(CARMEN);
+      }
+      else if (person == "Joao") {
+        seleciona_movimento(JOAO);
+      }
+
       delay(500);
+
     }
 
     Serial.println(" Access denied");
