@@ -10,7 +10,7 @@ VCC - 3.3V
 GND - GND
 
 # Breadboard
-![BREADBORAD](https://user-images.githubusercontent.com/39059647/59886238-1e1c1a80-93b6-11e9-8eff-c8bacdd06970.png)
+![LCD_Arduino_bb](https://user-images.githubusercontent.com/47796759/61814410-f2ba9e80-ae3f-11e9-9928-90c680c3bb2c.png)
 
 # Schematic
-![SCHEMATIC](https://user-images.githubusercontent.com/39059647/59886246-26745580-93b6-11e9-9c4b-5be7ca1c8607.png)
+![LCD_Arduino_Esquema](https://user-images.githubusercontent.com/47796759/61814439-fea66080-ae3f-11e9-8870-a5118d756c60.png)
