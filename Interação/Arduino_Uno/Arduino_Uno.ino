@@ -88,6 +88,7 @@ void game() {
       delay(1500);
     }
     seleciona_movimento(comp_choice);
+    delay(1500);
 
     if (comp_choice == ROCK) {
       lcd.setCursor(0, 0);
@@ -151,8 +152,8 @@ void game() {
 
       game_over = 1;
     }
-    delay(2500);
     seleciona_movimento(REST);
+    delay(2500);
   }
   Serial.println("Thank you for playing!\n");
   lcd.setCursor(0, 0);
