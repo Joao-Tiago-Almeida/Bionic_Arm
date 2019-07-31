@@ -111,10 +111,10 @@ void game() {
 
     Serial.print("Who won?\n1- ");
     Serial.print(player_name);
-    Serial.print("\n2- Computer");
-    while (!Serial.available() && (option.charAt(0) != '1' || option.charAt(0) != '2') && option == "") {
+    Serial.print("\n2- Computer\n3- Draw");
+    while (!Serial.available() && (option.charAt(0) != '1' || option.charAt(0) != '2' || option.charAt(0) != '3') && option == "") {
       option = Serial.readString();
-      if (option.charAt(0) != '1' && option.charAt(0) != '2' && option != "") {
+      if (option.charAt(0) != '1' && option.charAt(0) != '2' && option.charAt(0) != '3' && option != "") {
         Serial.println("Sorry, that's not a valid option! Try again.");
       }
     }
