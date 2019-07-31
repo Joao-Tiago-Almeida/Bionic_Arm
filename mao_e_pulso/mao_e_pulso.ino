@@ -1,7 +1,7 @@
 #include <Servo.h>
 #include <Wire.h>
 
-#define NUM_MOV 5 //número de movimentos conhecidos
+#define NUM_MOV 6 //número de movimentos conhecidos
 #define ANGULO_MAX 60 //ângulo máximo de compressão do fio
 #define ANGULO_MIN 0  //ângulo de à vontade
 #define ANGULO_MAX_P 180 //ângulo máximo de compressão do fio
@@ -24,23 +24,43 @@ typedef struct {
 
 // declarações de variáveis globais
 MAO mao;  //estrura que contem os dedos da mao
-vect_funcoes_void vect_movimentos_mao[NUM_MOV] = {&relax_mao, &pedra, &papel, &tesoura, &descanso};  //vetor com funções que representão os movimentos conhecidos
+vect_funcoes_void vect_movimentos_mao[NUM_MOV] = {&descanso, &pedra, &papel, &tesoura, &carmen, &joao};  //vetor com funções que representão os movimentos conhecidos
 Servo s_polegar, s_indicador, s_medio, s_anelar, s_mindinho, s_pulso;
 int *movimento = 0;
 
 // movimentos conhecidos
 void pedra() {
   angulos_mao(ANGULO_MAX, ANGULO_MAX, ANGULO_MAX, ANGULO_MAX, ANGULO_MAX, ANGULO_MAX_P / 2);
+  Serial.println("pedra");
 }
 void papel() {
   angulos_mao(ANGULO_MIN, ANGULO_MIN, ANGULO_MIN, ANGULO_MIN, ANGULO_MIN, ANGULO_MAX_P / 2);
+  Serial.println("papel");
 }
 void tesoura() {
-  angulos_mao(ANGULO_MAX, ANGULO_MIN, ANGULO_MIN, ANGULO_MAX, ANGULO_MIN, ANGULO_MAX_P / 2);
+  angulos_mao(ANGULO_MAX, ANGULO_MIN, ANGULO_MIN, ANGULO_MAX, ANGULO_MAX, ANGULO_MAX_P / 2);
+  Serial.println("tesoura");
 }
 void descanso() {
   angulos_mao(ANGULO_MAX / 2, ANGULO_MAX / 2, ANGULO_MAX / 2, ANGULO_MAX / 2, ANGULO_MAX / 2, ANGULO_MAX_P / 2);
+  Serial.println("descnaso");
 }
+void carmen() {
+  for (int j = 0; j < 5; j++) {
+    angulos_mao(ANGULO_MAX, ANGULO_MAX, ANGULO_MAX, ANGULO_MAX, ANGULO_MAX, ANGULO_MAX_P / 2);
+    angulos_mao(ANGULO_MIN, ANGULO_MIN, ANGULO_MIN, ANGULO_MIN, ANGULO_MIN, ANGULO_MAX_P / 2);
+    Serial.println("carmen");
+  }
+}
+void joao() {
+  for (int j = 0; j < 5; j++) {
+    angulos_mao(ANGULO_MAX, ANGULO_MIN, ANGULO_MIN, ANGULO_MAX, ANGULO_MIN, ANGULO_MIN);
+    angulos_mao(ANGULO_MAX, ANGULO_MIN, ANGULO_MIN, ANGULO_MAX, ANGULO_MIN, ANGULO_MAX_P);
+  }
+  angulos_mao(ANGULO_MIN, ANGULO_MIN, ANGULO_MIN, ANGULO_MIN, ANGULO_MIN, ANGULO_MAX_P / 2);
+  Serial.println("joao");
+}
+
 
 //funções auxiliares
 void angulos_mao(int p, int i, int M, int a, int m , int P) {
@@ -110,13 +130,13 @@ void info_mao() {
 }
 
 //atua quando a mão está pronta a ser utilizada
-void servo_ready(){
+void servo_ready() {
   pinMode(13, OUTPUT);
-  for(int i = 1; i <= NUM_MOV; i++){
+  for (int i = 1; i <= NUM_MOV; i++) {
     digitalWrite(13, HIGH);
-    delay(NUM_MOV/i);
+    delay(NUM_MOV / i);
     digitalWrite(13, LOW);
-    delay(NUM_MOV/i);
+    delay(NUM_MOV / i);
   }
 }
 
@@ -190,6 +210,6 @@ void setup() {
 }
 
 void loop() {
-  
+
 
 }
