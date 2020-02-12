@@ -1,38 +1,35 @@
-#include <Wire.h>
-#include <SPI.h>
-#include <MFRC522.h>
-#include <LiquidCrystal.h>
+#include <LiquidCrystal_I2C.h>
+
+#define NUM_MOV 6 //número de movimentos conhecidos
+#define ANGULO_MAX 60 //ângulo máximo de compressão do fio
+#define ANGULO_MIN 0  //ângulo de à vontade
+#define ANGULO_MAX_P 180 //ângulo máximo de compressão do fio
+#define SERVO_POS_UM 6  //pin do primeiro servo, os outros vêm de seguida, logo, SERVO_POS_UM = [1, 9]
+#define DELAY 0 //tempo de espera para rotacao dos servos
 
 #define NUM_MOV 5
-#define SS_PIN 10
-#define RST_PIN 9
 #define REST 0
 #define ROCK 1
 #define PAPER 2
 #define SCISSORS 3
-#define JOAO 4
-#define CARMEN 5
 
-MFRC522 mfrc522(SS_PIN, RST_PIN);
-bool get_card();
-
-const int rs = 7, en = 6, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
-LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
-
-void setup() {
-  Wire.begin();         //Transmissão
-  Serial.begin(9600);
-  SPI.begin();          //Leitura cartão
-  mfrc522.PCD_Init();
-  randomSeed(analogRead(0));
-  lcd.begin(16, 2);
-}
-
-String carmen_card = "8D 29 91 B9", joao_card = "15 55 89 92";
-byte movimento;
 String player_name = "", option = "";
 int game_over, comp_score, player_score, comp_choice;
+LiquidCrystal_I2C lcd(0x27,16,2);
 
+void setup() {
+  Serial.begin(9600);
+  randomSeed(analogRead(0));
+  lcd.init();
+  lcd.backlight();
+}
+
+void loop() {
+  menu();
+}
+
+
+/*---------- MENU PRINCIPAL ----------*/
 void menu() {
   Serial.println("----- Welcome to the Bionic Arm! -----\nWhat's your name?");
   lcd.setCursor(0, 0);
@@ -65,12 +62,13 @@ void menu() {
     game();
   }
   else if (option.charAt(0) == '2') {
-    read_card();
+  
   }
   option = "";
   player_name = "";
 }
 
+/*---------- PEDRA, PAPEL OU TESOURA ----------*/
 void game() {
   game_over = 0, comp_score = 0, player_score = 0;
   Serial.println("Let the games begin!");
@@ -161,65 +159,4 @@ void game() {
   lcd.setCursor(0, 1);
   lcd.print("playing!");
   delay(5000);
-}
-
-bool get_card() {
-  if ( ! mfrc522.PICC_IsNewCardPresent()) { // Look for new cards
-    return false;
-  }
-
-  if ( ! mfrc522.PICC_ReadCardSerial()) {   // Select one of the cards
-    return false;
-  }
-  return true;
-}
-
-void read_card() {
-  Serial.println("Put your card to the reader, please...");
-  while (!get_card());
-  Serial.print("UID tag :");
-  String content = "";
-  for (byte i = 0; i < mfrc522.uid.size; i++) {
-    Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
-    Serial.print(mfrc522.uid.uidByte[i], HEX);
-    content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
-    content.concat(String(mfrc522.uid.uidByte[i], HEX));
-
-    Serial.println();
-    Serial.print("Message : ");
-    content.toUpperCase();
-    if (content.substring(1) == carmen_card || content.substring(1) == joao_card) {
-      Serial.println("Authorized access");
-      String person = content.substring(1) == carmen_card ? "Carmen" : "Joao" ;
-      Serial.print("Hi ");
-      Serial.println(person);
-      Serial.println();
-      lcd.setCursor(0, 0);
-      lcd.print("Hello,");
-      lcd.setCursor(0, 1);
-      lcd.print(person);
-
-      if (person == "Carmen") {
-        seleciona_movimento(CARMEN);
-      }
-      else if (person == "Joao") {
-        seleciona_movimento(JOAO);
-      }
-
-      delay(500);
-
-    }
-
-    Serial.println(" Access denied");
-  }
-}
-
-void seleciona_movimento(byte num) {
-  Wire.beginTransmission(8);
-  Wire.write(num);
-  Wire.endTransmission();
-}
-
-void loop() {
-  menu();
 }

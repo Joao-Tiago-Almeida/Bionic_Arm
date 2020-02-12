@@ -1,14 +1,3 @@
-#include <Servo.h>
-#include <Wire.h>
-
-#define NUM_MOV 6 //número de movimentos conhecidos
-#define ANGULO_MAX 60 //ângulo máximo de compressão do fio
-#define ANGULO_MIN 0  //ângulo de à vontade
-#define ANGULO_MAX_P 180 //ângulo máximo de compressão do fio
-#define SERVO_POS_UM 6  //pin do primeiro servo, os outros vêm de seguida, logo, SERVO_POS_UM = [1, 9]
-#define DELAY 0 //tempo de espera para rotacao dos servos
-#define ENDERECO 8  //linha de informação de master-slave
-
 //vetor de funções void
 typedef void (*vect_funcoes_void)();
 
@@ -44,21 +33,6 @@ void tesoura() {
 void descanso() {
   angulos_mao(ANGULO_MAX / 2, ANGULO_MAX / 2, ANGULO_MAX / 2, ANGULO_MAX / 2, ANGULO_MAX / 2, ANGULO_MAX_P / 2);
   Serial.println("descnaso");
-}
-void carmen() {
-  for (int j = 0; j < 5; j++) {
-    angulos_mao(ANGULO_MAX, ANGULO_MAX, ANGULO_MAX, ANGULO_MAX, ANGULO_MAX, ANGULO_MAX_P / 2);
-    angulos_mao(ANGULO_MIN, ANGULO_MIN, ANGULO_MIN, ANGULO_MIN, ANGULO_MIN, ANGULO_MAX_P / 2);
-    Serial.println("carmen");
-  }
-}
-void joao() {
-  for (int j = 0; j < 5; j++) {
-    angulos_mao(ANGULO_MAX, ANGULO_MIN, ANGULO_MIN, ANGULO_MAX, ANGULO_MIN, ANGULO_MIN);
-    angulos_mao(ANGULO_MAX, ANGULO_MIN, ANGULO_MIN, ANGULO_MAX, ANGULO_MIN, ANGULO_MAX_P);
-  }
-  angulos_mao(ANGULO_MIN, ANGULO_MIN, ANGULO_MIN, ANGULO_MIN, ANGULO_MIN, ANGULO_MAX_P / 2);
-  Serial.println("joao");
 }
 
 
@@ -97,15 +71,14 @@ int max_value(int p, int i, int M, int a, int m, int P) {
   int bb = max(M, a);
   int cc = max(aa, bb);
   return max(cc, m);
-
 }
-void init_mao() {
 
+void init_mao() {
   vect_movimentos_mao[2]();
   vect_movimentos_mao[0]();
   vect_movimentos_mao[2]();
-
 }
+
 void relax_mao() {
   int times = 1;
   for (int i = 0; i <  times * 5; i++) {
@@ -195,21 +168,6 @@ void receiveEvent(int howMany) {
     vect_movimentos_mao[*movimento]();
 }
 
-void setup() {
-  Wire.begin(ENDERECO);
-
-  Wire.onReceive(receiveEvent);
-  Serial.begin(9600);
-
-  attach_servos();
-  init_mao();
-  servo_ready();
-  //detach_servos();
-
-
-}
 
 void loop() {
-
-
 }
