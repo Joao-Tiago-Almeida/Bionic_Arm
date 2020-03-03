@@ -21,8 +21,9 @@ LiquidCrystal_I2C lcd(0x27,16,2);
 void setup() {
   Serial.begin(9600);
   randomSeed(analogRead(0));
-  lcd.init();
-  lcd.backlight();
+  lcd.begin (16,2);
+  lcd.setBacklight(HIGH);
+  lcd.setCursor(0, 0);
   attach_servos();
   init_mao();
 }
