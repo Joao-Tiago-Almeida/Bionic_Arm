@@ -5,7 +5,7 @@
 #define ANGULO_MAX 60 //ângulo máximo de compressão do fio
 #define ANGULO_MIN 0  //ângulo de à vontade
 #define ANGULO_MAX_P 180 //ângulo máximo de compressão do fio
-#define SERVO_POS_UM 12  //pin do primeiro servo, os outros vêm de seguida, logo, SERVO_POS_UM = [1, 9]
+#define SERVO_POS_UM 12  //pin do polegar, os outros são a decrementar
 #define DELAY 0 //tempo de espera para rotacao dos servos
 
 #define NUM_MOV 5
@@ -25,7 +25,6 @@ void setup() {
   lcd.backlight();
   attach_servos();
   init_mao();
-  //relax_mao();
 }
 
 /*---------- MOVIMENTOS MÃO ----------*/
@@ -51,19 +50,19 @@ int movimento = 0;
 // movimentos conhecidos
 void pedra() {
   angulos_mao(ANGULO_MAX, ANGULO_MAX, ANGULO_MAX, ANGULO_MAX, ANGULO_MAX, ANGULO_MAX_P / 2);
-  Serial.println("pedra");
+  Serial.println("*Arm chooses rock*");
 }
 void papel() {
   angulos_mao(ANGULO_MIN, ANGULO_MIN, ANGULO_MIN, ANGULO_MIN, ANGULO_MIN, ANGULO_MAX_P / 2);
-  Serial.println("papel");
+  Serial.println("*Arm chooses paper*");
 }
 void tesoura() {
   angulos_mao(ANGULO_MAX, ANGULO_MIN, ANGULO_MIN, ANGULO_MAX, ANGULO_MAX, ANGULO_MAX_P / 2);
-  Serial.println("tesoura");
+  Serial.println("*Arm chooses scissors*");
 }
 void descanso() {
-  angulos_mao(ANGULO_MAX / 2, ANGULO_MAX / 2, ANGULO_MAX / 2, ANGULO_MAX / 2, ANGULO_MAX / 2, ANGULO_MAX_P / 2);
-  Serial.println("descnaso");
+  angulos_mao(ANGULO_MAX / 2 -10, ANGULO_MAX / 2 -10, ANGULO_MAX / 2 -10, ANGULO_MAX / 2 -10, ANGULO_MAX / 2 -10, ANGULO_MAX_P / 2);
+  Serial.println("*Arm at rest*");
 }
 
 //funções auxiliares
@@ -87,7 +86,6 @@ void angulos_mao(int p, int i, int M, int a, int m , int P) {
     //if(mao.pulso < P) mao.pulso++;
     //else if(mao.pulso > P) mao.pulso--;
     mao.pulso = P;
-    //info_mao();
     servos_mao();
   }
 }
@@ -104,32 +102,8 @@ int max_value(int p, int i, int M, int a, int m, int P) {
 }
 
 void init_mao() {
-  vect_movimentos_mao[2]();
+  vect_movimentos_mao[0]();
 }
-
-void relax_mao() {
-  int times = 1;
-  for (int i = 0; i <  times * 5; i++) {
-    angulos_mao(ANGULO_MAX * (((i + 5) % 5) == 0), ANGULO_MAX * (((i + 4) % 5) == 0), ANGULO_MAX * (((i + 3) % 5) == 0), ANGULO_MAX * (((i + 2) % 5) == 0), ANGULO_MAX * (((i + 1) % 5) == 0), ANGULO_MAX_P / 2);
-
-  }
-}
-void info_mao() {
-  Serial.print("Polegar: ");
-  Serial.println(mao.polegar);
-  Serial.print("Indicador: ");
-  Serial.println(mao.indicador);
-  Serial.print("Médio: ");
-  Serial.println(mao.medio);
-  Serial.print("Anelar: ");
-  Serial.println(mao.anelar);
-  Serial.print("Mindinho: ");
-  Serial.println(mao.mindinho);
-  Serial.print("Pulso: ");
-  Serial.println(mao.pulso);
-  Serial.println();
-}
-
 
 //funções relacionadas com os servos
 void attach_servos() {
@@ -172,7 +146,6 @@ void servos_mao() {
   }
 }
 
-
 void move_hand(int mov){
   if (mov >= 0 && mov < NUM_MOV)
     vect_movimentos_mao[mov]();
@@ -201,7 +174,7 @@ void menu() {
   lcd.setCursor(0, 1);
   lcd.print(player_name);
 
-  Serial.println("\nWhat would you like to do?\n1- Play Rock, Paper, Scissors\n2- Read my school card for a special move");
+  Serial.println("\nWhat would you like to do?\n1- Play Rock, Paper, Scissors\n2- Option unavailable at the moment");
 
   while (!Serial.available() && (option.charAt(0) != '1' || option.charAt(0) != '2') && option == "") {
     option = Serial.readString();
