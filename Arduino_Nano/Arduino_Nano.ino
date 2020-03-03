@@ -5,7 +5,7 @@
 #define ANGULO_MAX 60 //ângulo máximo de compressão do fio
 #define ANGULO_MIN 0  //ângulo de à vontade
 #define ANGULO_MAX_P 180 //ângulo máximo de compressão do fio
-#define SERVO_POS_UM 6  //pin do primeiro servo, os outros vêm de seguida, logo, SERVO_POS_UM = [1, 9]
+#define SERVO_POS_UM 12  //pin do primeiro servo, os outros vêm de seguida, logo, SERVO_POS_UM = [1, 9]
 #define DELAY 0 //tempo de espera para rotacao dos servos
 
 #define NUM_MOV 5
@@ -25,7 +25,7 @@ void setup() {
   lcd.backlight();
   attach_servos();
   init_mao();
-  servo_ready();
+  //relax_mao();
 }
 
 /*---------- MOVIMENTOS MÃO ----------*/
@@ -46,7 +46,7 @@ typedef struct {
 MAO mao;  //estrura que contem os dedos da mao
 vect_funcoes_void vect_movimentos_mao[NUM_MOV] = {&descanso, &pedra, &papel, &tesoura};  //vetor com funções que representão os movimentos conhecidos
 Servo s_polegar, s_indicador, s_medio, s_anelar, s_mindinho, s_pulso;
-int *movimento = 0;
+int movimento = 0;
 
 // movimentos conhecidos
 void pedra() {
@@ -105,8 +105,6 @@ int max_value(int p, int i, int M, int a, int m, int P) {
 
 void init_mao() {
   vect_movimentos_mao[2]();
-  vect_movimentos_mao[0]();
-  vect_movimentos_mao[2]();
 }
 
 void relax_mao() {
@@ -132,30 +130,17 @@ void info_mao() {
   Serial.println();
 }
 
-//atua quando a mão está pronta a ser utilizada
-void servo_ready() {
-  pinMode(13, OUTPUT);
-  for (int i = 1; i <= NUM_MOV; i++) {
-    digitalWrite(13, HIGH);
-    delay(NUM_MOV / i);
-    digitalWrite(13, LOW);
-    delay(NUM_MOV / i);
-  }
-}
 
 //funções relacionadas com os servos
 void attach_servos() {
-  /*s_polegar.attach(SERVO_POS_UM, ANGULO_MIN, ANGULO_MAX);
-    s_indicador.attach(SERVO_POS_UM + 1, ANGULO_MIN, ANGULO_MAX);
-    s_medio.attach(SERVO_POS_UM + 2, ANGULO_MIN, ANGULO_MAX);*/
-
   s_polegar.attach(SERVO_POS_UM);
-  s_indicador.attach(SERVO_POS_UM + 1);
-  s_medio.attach(SERVO_POS_UM + 2);
-  s_anelar.attach(SERVO_POS_UM + 3);
-  s_mindinho.attach(SERVO_POS_UM + 4);
-  s_pulso.attach(SERVO_POS_UM + 5);
+  s_indicador.attach(SERVO_POS_UM - 1);
+  s_medio.attach(SERVO_POS_UM - 2);
+  s_anelar.attach(SERVO_POS_UM - 3);
+  s_mindinho.attach(SERVO_POS_UM - 4);
+  s_pulso.attach(SERVO_POS_UM - 5);
 }
+
 void detach_servos() {
   s_polegar.detach();
   s_indicador.detach();
@@ -164,6 +149,7 @@ void detach_servos() {
   s_mindinho.detach();
   s_pulso.detach();
 }
+
 void servos_mao() {
   if (s_polegar.read() != mao.polegar) {
     s_polegar.write(mao.polegar);
