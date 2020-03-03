@@ -1,0 +1,15 @@
+IMPORTANTE: Conectar tudo antes de ligar o arduino nano à corrente.
+
+DEDOS:
+Ligar cada cabo com a parte castanha (GND) para o lado de fora e a amarela para o lado do arduino.
+D12 - polegar (1)
+D11 - indicador (2)
+D10 - meio (3)
+D09 - anelar (4)
+D08 - mindinho (5)
+D07 -pulso (P)
+
+LCD:
+Ver conexões na placa soldada.
+SDA - A4
+SCL - A5
