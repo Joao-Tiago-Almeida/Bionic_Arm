@@ -1,0 +1,2 @@
+- Fazer upload do ficheiro Arduino_Nano para o arduino.
+- Ao correr o código, abrir o Monitor Série do Arduino IDE para aceder ao menu principal.
